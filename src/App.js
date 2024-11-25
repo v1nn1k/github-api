@@ -6,18 +6,35 @@ import './App.css';
 function App() {
   const [inputValue, setInputValue] = useState("");
   const [repos, setRepos] = useState([]);
+  const [errorMessage, setError] = useState(null);
 
   const getRepoByUsername =  () => {
+    if (!inputValue.trim()) {
+      setError("Please enter a username");
+      setRepos([]);
+      return;
+    }
+    setError(null);
     fetch(`https://api.github.com/users/${inputValue}/repos`, {
     headers: {
       Authorization: `forsto`,
       "Content-Type": "application/json",
     },
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if(!response.ok) {
+          setRepos([]);
+          throw new Error ('User not found');
+        }
+          return response.json();
+    })
       .then((json) => {
         setRepos(json);
-      });}
+      })
+    .catch((error) => {
+      setError(error.message)
+    })}
+      
   
   return (
     <div>
@@ -29,14 +46,16 @@ function App() {
         <button onClick={getRepoByUsername}>Show repos</button>
       </div>
       <div >
-    {repos.map((repo) => (
-      <div className='repos' key={repo.id}>
-        <h3>{repo.name}</h3>
-        <p>{repo.description}</p>
-      </div>
-    ))}
+      {errorMessage ? (
+        <p>{errorMessage}</p>
+        ) :       repos.map((repo) => (
+          <div className='repos' key={repo.id}>
+            <h3>{repo.name}</h3>
+            <p>{repo.description}</p>
+          </div>
+      ))}
   </div>
-</div>
+  </div>
   );
 }
 
