@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useEffect} from 'react';
 import './App.css';
 
 
@@ -8,16 +8,16 @@ function App() {
   const [repos, setRepos] = useState([]);
   const [errorMessage, setError] = useState(null);
 
-  const getRepoByUsername =  () => {
-    if (!inputValue.trim()) {
+  const getRepoByUsername =  (username = inputValue) => {
+    if (!username.trim()) {
       setError("Please enter a username");
       setRepos([]);
       return;
     }
     setError(null);
-    fetch(`https://api.github.com/users/${inputValue}/repos`, {
+    fetch(`https://api.github.com/users/${username}/repos`, {
     headers: {
-      Authorization: `forsto`,
+      Authorization: forsto,
       "Content-Type": "application/json",
     },
     })
@@ -33,8 +33,24 @@ function App() {
       })
     .catch((error) => {
       setError(error.message)
-    })}
+    })
+  }
       
+    const changeUrl = () => {
+      const params = new URLSearchParams(window.location.search);
+      params.set('user', inputValue);
+      window.history.replaceState(null, '', `?${params.toString()}`);
+      getRepoByUsername();
+    }
+    
+    useEffect(() => {
+      const params = new URLSearchParams(window.location.search);
+      const usernameFromURL = params.get('user'); 
+      if (usernameFromURL) {
+        setInputValue(usernameFromURL);
+        getRepoByUsername(usernameFromURL);
+      }
+    }, []);
   
   return (
     <div>
@@ -43,7 +59,7 @@ function App() {
         <input type="text" value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           placeholder="Put username here"/>
-        <button onClick={getRepoByUsername}>Show repos</button>
+        <button onClick={changeUrl}>Show repos</button>
       </div>
       <div >
       {errorMessage ? (
