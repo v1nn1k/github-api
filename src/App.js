@@ -4,7 +4,11 @@ import './App.css';
 
 
 function App() {
-  const [inputValue, setInputValue] = useState("");
+  const [inputValue, setInputValue] = useState(() => {
+    const params = new URLSearchParams(window.location.search);
+    const usernameFromURL = params.get('query'); 
+    return usernameFromURL || '';
+  })
   const [repos, setRepos] = useState([]);
   const [errorMessage, setError] = useState(null);
 
@@ -17,7 +21,6 @@ function App() {
     setError(null);
     fetch(`https://api.github.com/users/${username}/repos`, {
     headers: {
-      Authorization: forsto,
       "Content-Type": "application/json",
     },
     })
@@ -32,45 +35,42 @@ function App() {
         setRepos(json);
       })
     .catch((error) => {
-      setError(error.message)
+      setError(error.message);
     })
   }
       
     const changeUrl = () => {
       const params = new URLSearchParams(window.location.search);
-      params.set('user', inputValue);
+      params.set('query', inputValue);
       window.history.replaceState(null, '', `?${params.toString()}`);
       getRepoByUsername();
     }
     
     useEffect(() => {
-      const params = new URLSearchParams(window.location.search);
-      const usernameFromURL = params.get('user'); 
-      if (usernameFromURL) {
-        setInputValue(usernameFromURL);
-        getRepoByUsername(usernameFromURL);
-      }
-    }, []);
+        getRepoByUsername(inputValue);
+    }, [inputValue]);
   
   return (
-    <div>
+    <div className="container">
       <h1>GitHub Repository Explorer</h1>
       <div>
         <input type="text" value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           placeholder="Put username here"/>
-        <button onClick={changeUrl}>Show repos</button>
-      </div>
-      <div >
+        <button onClick={changeUrl} className='load-button'>Load Repos</button>
+      <div className="main">
       {errorMessage ? (
         <p>{errorMessage}</p>
         ) :       repos.map((repo) => (
           <div className='repos' key={repo.id}>
             <h3>{repo.name}</h3>
             <p>{repo.description}</p>
+            <p>Language: {repo.language}</p>
+            <a href={repo.clone_url}>View on GitHub</a>
           </div>
       ))}
-  </div>
+      </div>
+    </div>
   </div>
   );
 }
