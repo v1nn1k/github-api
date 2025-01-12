@@ -1,6 +1,11 @@
 import React from 'react';
 import { useState, useEffect} from 'react';
 import './App.css';
+import './styles/reset.css';
+import Input from './components/Search/Search';
+import RepoCard from './components/RepoCard/RepoCard';
+import { Routes } from "react-router";
+
 
 
 function App() {
@@ -51,27 +56,17 @@ function App() {
     }, [inputValue]);
   
   return (
-    <div className="container">
-      <h1>GitHub Repository Explorer</h1>
-      <div>
-        <input type="text" value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-          placeholder="Put username here"/>
-        <button onClick={changeUrl} className='load-button'>Load Repos</button>
-      <div className="main">
-      {errorMessage ? (
-        <p>{errorMessage}</p>
-        ) :       repos.map((repo) => (
-          <div className='repos' key={repo.id}>
-            <h3>{repo.name}</h3>
-            <p>{repo.description}</p>
-            <p>Language: {repo.language}</p>
-            <a href={repo.clone_url}>View on GitHub</a>
-          </div>
-      ))}
-      </div>
-    </div>
-  </div>
+    <>
+      <Input
+        inputValue={inputValue}
+        setInputValue={setInputValue}
+        changeUrl={changeUrl}
+      />
+      <RepoCard 
+        errorMessage={errorMessage}
+        repos={repos}
+      />  
+  </>
   );
 }
 
