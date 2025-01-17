@@ -4,7 +4,8 @@ import './App.css';
 import './styles/reset.css';
 import Input from './components/Search/Search';
 import RepoCard from './components/RepoCard/RepoCard';
-import { Routes } from "react-router";
+import Commits from './components/Commits/Commits';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 
 
@@ -37,6 +38,7 @@ function App() {
           return response.json();
     })
       .then((json) => {
+        console.log(json);
         setRepos(json);
       })
     .catch((error) => {
@@ -57,15 +59,28 @@ function App() {
   
   return (
     <>
-      <Input
-        inputValue={inputValue}
-        setInputValue={setInputValue}
-        changeUrl={changeUrl}
-      />
-      <RepoCard 
-        errorMessage={errorMessage}
-        repos={repos}
-      />  
+    <Router>
+      <Routes>
+        <Route path='/' 
+        element={
+        <><Input
+          inputValue={inputValue}
+          setInputValue={setInputValue}
+          changeUrl={changeUrl}
+        />
+        <RepoCard 
+          errorMessage={errorMessage}
+          repos={repos}
+        />
+        </>}
+        />
+        <Route path="/commits/:username/:repoName"
+        element={
+          <Commits
+          />}
+        />
+        </Routes>
+      </Router>
   </>
   );
 }

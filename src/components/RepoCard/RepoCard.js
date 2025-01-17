@@ -2,7 +2,8 @@ import React from "react";
 import starLogo from '../../assets/images/star-logo.svg';
 import forksLogo from '../../assets/images/star-logo.svg';
 import watchersLogo from '../../assets/images/star-logo.svg';
-import '../RepoCard/RepoCard.css'
+import '../RepoCard/RepoCard.css';
+import { Link } from "react-router-dom";
 
 function RepoCard({errorMessage, repos}) {
   
@@ -22,7 +23,8 @@ function RepoCard({errorMessage, repos}) {
               <div className="icon--item"><img className="icon" src={forksLogo} alt="forks" /><span>{repo.forks}</span></div>
               <div className="icon--item"><img className="icon" src={watchersLogo} alt="watchers" /><span>{repo.watchers}</span></div>
               </div>
-            <a href={repo.clone_url}>View on GitHub</a>
+            <a href={repo.clone_url} target="_blank">View on GitHub</a>
+            <Link to={`/commits/${repo.full_name}`} className="view-commits-link"><p>View commits</p></Link>
           </div>)) : (<p>No repositories found</p>)}
       </div>
     </div>
