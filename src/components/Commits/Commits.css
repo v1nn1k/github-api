@@ -1,0 +1,37 @@
+.commits__inner {
+  margin-top: 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.commits__item {
+  width: inherit;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  height: 200px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 30px 20px;
+  background-color: #fff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.item__title {
+  font-weight: 700;
+  margin-bottom: 10px;
+  word-wrap: break-word;
+}
+
+.commits__item__inner {
+  display: flex;
+  justify-content: flex-start;
+  gap: 30px;
+}
+
+.commits__item__inner--lucide {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}

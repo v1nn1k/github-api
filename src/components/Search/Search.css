@@ -1,0 +1,30 @@
+.search__flex {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+input {
+  width: 900px;
+  height: 41px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding-left: 20px;
+  font-size: 18px;
+}
+
+button {
+  margin-left: 10px;
+  text-align: center;
+  width: 200px;
+  height: 41px;
+  border-radius: 7px;
+  background-color: #000000;
+  color: #ffffff;
+}
+
+.search__title {
+  margin-top: 150px;
+  margin-bottom: 20px;
+  font-size: 30px;
+}
